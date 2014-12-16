@@ -1,0 +1,83 @@
+---
+- name: install libselinux-python if selinux is enabled
+  yum:
+    name={{ item }}
+    state=present
+  with_items: percona_mysql_selinux_pkgs
+  when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled'
+
+- name: add mysql group
+  group:
+    name=mysql
+    system=yes
+    state=present
+
+- name: add mysql user
+  user:
+    name=mysql
+    system=yes
+    group=mysql
+    comment="MySQL Server"
+    home=/dev/null
+    shell={{ percona_mysql_user_shell }}
+    state=present
+
+- name: create and manage percona_mysql_cnf_dir directory
+  file:
+    path=/etc/mysql
+    owner=mysql
+    group=mysql
+    mode=0750
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_etc_t
+    selevel=s0
+    state=directory
+
+- name: create and manage percona_mysql_run_dir directory
+  file:
+    path=/var/run/mysqld
+    owner=mysql
+    group=mysql
+    mode=0755
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_var_run_t
+    selevel=s0
+    state=directory
+
+- name: create and mysql directories and files
+  include: configuration_mysql_dir.yml
+
+- name: check if mysql is listening on the percona_mysql_port
+  wait_for:
+    port={{ percona_mysql_port }}
+    timeout=1
+    state=started
+  changed_when: false
+  ignore_errors: yes
+  register: percona_mysql_port_check
+
+- name: create context mapping for non-standard percona_mysql_port (if the port is not already listening)
+  command:
+    semanage port -a -t mysqld_port_t -p tcp {{ percona_mysql_port }}
+  when: ansible_os_family == 'RedHat' and {{ percona_mysql_port }} != 3306 and percona_mysql_port_check.failed
+  tags: percona_mysql_manage_security
+
+- name: copy my.cnf
+  template:
+    src="my.cnf.j2"
+    dest=/etc/mysql/my.cnf
+    owner=mysql
+    group=mysql
+    mode=0640
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_etc_t
+    selevel=s0
+  notify: restart mysql
+
+- name: check if we're installing or upgrading (default is install)
+  set_fact:
+    percona_mysql_state='latest'
+  when: percona_mysql_upgrade

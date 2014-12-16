@@ -1,0 +1,53 @@
+---
+- name: install percona server apt-key
+  apt_key:
+    keyserver={{ percona_mysql_key_server }}
+    id=1C4CBDCDCD2EFD2A
+    state=present
+
+- name: install percona repo on debian family hosts
+  apt_repository:
+    repo="{{ item }}"
+    state=present
+  register: percona_mysql_apt_repo
+  with_items: percona_mysql_repo
+
+- name: update apt cache
+  apt:
+    update_cache=yes
+  when: percona_mysql_apt_repo.changed
+
+- name: install mysql package on debian family hosts
+  apt:
+    name="{{ percona_mysql_pkg }}"
+    state={{ percona_mysql_state|default('present') }}
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  register: percona_mysql_pkg_check_debian
+
+- name: install additional packages on debian family hosts
+  apt:
+    name={{ item }}
+    state=present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  with_items: percona_mysql_additional_pkgs
+  tags: percona_mysql_additional_pkgs
+
+- name: install mysql backup related packages on debian family hosts
+  apt:
+    name={{ item }}
+    state=present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  with_items: percona_mysql_backup_pkgs
+  tags: percona_mysql_backup_pkgs
+
+- name: install optional packages on debian family hosts
+  apt:
+    name={{ item }}
+    state=present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  with_items: percona_mysql_optional_pkgs
+  tags: percona_mysql_optional_pkgs

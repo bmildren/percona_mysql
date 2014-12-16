@@ -1,0 +1,23 @@
+### {{ ansible_managed }}
+### Installed in /etc/logrotate.d/
+### Execute /usr/sbin/logrotate -d /etc/logrotate.d/mysql to test config
+### Can use FLUSH ERROR LOGS; on mysql 5.5+
+
+{{ percona_mysql_log_dir }}/mysql_error.log {
+    create 640 mysql root
+    daily
+    minsize 512M
+    rotate 7
+    notifempty
+    missingok
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+    {% if percona_mysql_server_version|replace(".","") < 55 %}
+       env HOME=/root/ `which mysql` -e 'FLUSH LOGS'
+    {% else %}
+       env HOME=/root/ `which mysql` -e 'FLUSH ERROR LOGS'
+    {% endif %}
+    endscript
+}

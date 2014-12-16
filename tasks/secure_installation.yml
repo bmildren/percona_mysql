@@ -1,0 +1,80 @@
+---
+- name: copy global client /etc/my.cnf
+  sudo: yes
+  template:
+    src=client.my.cnf.j2
+    dest=/etc/my.cnf
+    owner=root
+    group=root
+    mode=0644
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_etc_t
+    selevel=s0
+
+- name: create user
+  mysql_user:
+    name={{ percona_mysql_user_name }}
+    host={{ percona_mysql_user_host }}
+    password="{{ percona_mysql_user_password|default(lookup('password', '/tmp/percona_mysql/' + inventory_hostname + '_percona_mysql_user_password_file length=12 chars=ascii_letters,digits'), true) }}"
+    priv={{ percona_mysql_user_priv|default("*.*:ALL,GRANT") }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+
+- name: copy .my.cnf
+  template:
+    src=user.my.cnf.j2
+    dest="{{ percona_mysql_home_dir }}/{{ percona_mysql_installation_user }}/.my.cnf"
+    owner={{ percona_mysql_installation_user }}
+    group={{ percona_mysql_installation_user }}
+    mode=0600
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_etc_t
+    selevel=s0
+
+- name: remove anonymous users
+  mysql_user:
+    name=''
+    host={{ item }}
+    state=absent
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  with_items:
+      - localhost
+      - "{{ ansible_hostname }}"
+
+- name: remove superfluous root users
+  mysql_user:
+    name=root
+    host={{ item }}
+    state=absent
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  with_items:
+      - 127.0.0.1
+      - ::1
+      - "{{ ansible_hostname }}"
+
+- name: update root password
+  mysql_user:
+    name=root
+    host=localhost
+    password="{{ percona_mysql_root_password|default(lookup('password', '/tmp/percona_mysql/' + inventory_hostname + '_percona_mysql_root_password_file length=12 chars=ascii_letters,digits'), true) }}"
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+
+- name: copy .my.cnf
+  sudo: yes
+  template:
+    src=root.my.cnf.j2
+    dest="{{ ansible_env.HOME }}/.my.cnf"
+    owner=root
+    group=root
+    mode=0600
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_etc_t
+    selevel=s0
+
+- name: remove test database
+  mysql_db:
+    name=test
+    state=absent
+    login_unix_socket=/var/run/mysqld/mysqld.sock

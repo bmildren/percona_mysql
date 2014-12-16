@@ -1,0 +1,5 @@
+### {{ ansible_managed }}
+[client]
+socket=/var/run/mysqld/mysqld.sock
+user=root
+password={{ percona_mysql_root_password|default(lookup('file', '/tmp/percona_mysql/' + inventory_hostname + '_percona_mysql_root_password_file'), true) }}

@@ -1,0 +1,10 @@
+- name: include OS specific vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- include: configuration_pre_install.yml
+- include: install.yml
+- include: configuration_post_install.yml
+- include: secure_installation.yml
+  sudo: no
+  when: percona_mysql_install == 'master'
+- include: install_logrotate.yml

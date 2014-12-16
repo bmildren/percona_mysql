@@ -1,0 +1,19 @@
+---
+percona_mysql_repo:
+    - deb http://repo.percona.com/apt {{ ansible_distribution_release }} main
+    - deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main
+
+percona_mysql_pkg: percona-server-server-{{ percona_mysql_server_version }}
+
+percona_mysql_additional_pkgs:
+  - python-mysqldb
+  - percona-toolkit
+
+percona_mysql_backup_pkgs:
+  - percona-xtrabackup
+  - qpress
+
+percona_mysql_optional_pkgs:
+    - logrotate
+
+percona_mysql_user_shell: /usr/sbin/nologin

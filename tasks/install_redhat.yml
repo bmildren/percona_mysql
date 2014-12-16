@@ -1,0 +1,33 @@
+---
+- name: install percona repo on red hat family hosts
+  yum:
+    name={{ item }}
+    state=present
+  with_items: percona_mysql_repo
+
+- name: install mysql package on red hat family hosts
+  yum:
+    name="{{ percona_mysql_pkg }}"
+    state={{ percona_mysql_state|default('present') }}
+  register: percona_mysql_pkg_check_redhat
+
+- name: install additional packages on red hat family hosts
+  yum:
+    name={{ item }}
+    state=present
+  with_items: percona_mysql_additional_pkgs
+  tags: percona_mysql_additional_pkgs
+
+- name: install mysql backup related packages on red hat family hosts
+  yum:
+    name={{ item }}
+    state=present
+  with_items: percona_mysql_backup_pkgs
+  tags: percona_mysql_backup_pkgs
+
+- name: install optional packages on red hat family hosts
+  yum:
+    name={{ item }}
+    state=present
+  with_items: percona_mysql_optional_pkgs
+  tags: percona_mysql_optional_pkgs

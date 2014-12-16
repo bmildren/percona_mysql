@@ -1,0 +1,233 @@
+---
+### By default we just want to ensure that MySQL is installed. To override this
+### and perform an upgrade, you need to explicitly set percona_mysql_upgrade to
+### false. Any other value, will result in the default behaviour of simply
+### checking the package is present. Note upgrading MySQL will force the service
+### to be stopped first if an upgrade is available.
+
+percona_mysql_upgrade: false
+
+### Optionally run mysql_upgrade if the MySQL version installed changes.
+
+percona_mysql_check_upgrade: false
+
+### Desired MySQL server version and role
+
+percona_mysql_server_version: 5.5
+percona_mysql_install: master
+
+### Optionally restart MySQL if the my.cnf changes
+
+percona_mysql_force_restart: 0
+
+percona_mysql_key_server: keys.gnupg.net
+
+### Variables to supply mysql user data, if passwords are blank, passwords will 
+### be automatically generated.  The recommendation is to use ansible-vault.
+
+percona_mysql_root_password:
+
+percona_mysql_user_name: percona
+percona_mysql_user_host: localhost
+percona_mysql_user_password:
+
+percona_mysql_home_dir: /home
+percona_mysql_installation_user: vagrant
+
+percona_mysql_service_name: mysql
+percona_mysql_port: 3306
+
+### MySQL Configuration Options
+
+# General options
+# ---------------
+# user
+percona_mysql_service_user: mysql
+# basedir
+percona_mysql_base_dir: /usr
+# datadir
+percona_mysql_data_dir: /var/lib/mysql
+# tmpdir
+percona_mysql_tmp_dir: /var/lib/mysql-tmp
+# character-set-server
+percona_mysql_character_set_server: utf8
+# collation-server
+percona_mysql_collation_server: utf8_general_ci
+# sql-mode
+percona_mysql_sql_mode: NO_ENGINE_SUBSTITUTION,STRICT_ALL_TABLES
+# default_storage_engine
+percona_mysqL_default_storage_engine: InnoDB
+# transaction-isolation
+percona_mysql_transaction_isolation: READ-COMMITTED
+# sysdate-is-now
+percona_mysql_sysdate_is_now: 0
+# expand_fast_index_creation
+percona_mysql_expand_fast_index_creation: 1
+# safe-user-create
+percona_mysql_safe_user_create: 1
+# query_response_time_stats
+percona_mysql_query_response_time_stats: 1
+# event-scheduler
+percona_mysql_event_scheduler: 0
+# performance_schema
+percona_mysql_performance_schema: 0
+
+### Connectivity options
+# read_only
+percona_mysql_read_only: off
+# bind-address
+percona_mysql_bind_address: "::"
+# port
+percona_mysql_port: 3306
+# net_write_timeout
+percona_mysql_net_write_timeout: 3600
+# interactive_timeout
+percona_mysql_interactive_timeout: 14400
+# wait_timeout
+percona_mysql_wait_timeout: 14400
+# skip-name-resolve
+percona_mysql_skip_name_resolve: 1
+# secure-auth
+percona_mysql_secure_auth: 1
+# max_allowed_packet
+percona_mysql_max_allowed_packet: 16M
+# back_log
+percona_mysql_back_log: 2048
+# thread_cache_size
+percona_mysql_thread_cache_size: 64
+# max_connections
+percona_mysql_max_connections: 500
+# max_user_connections
+percona_mysql_max_user_connections: 400
+# max_connect_errors
+percona_mysql_max_connect_errors: 1000000
+
+### General caches
+# key_buffer_size
+percona_mysql_key_buffer_size: 16M
+# query_cache_type
+percona_mysql_query_cache_type: 0
+# query_cache_size
+percona_mysql_query_cache_size: 0
+# table_open_cache
+percona_mysql_table_open_cache: 8192
+# tmp_table_size
+percona_mysql_tmp_table_size: 16M
+# max_heap_table_size
+percona_mysql_max_heap_table_size: 16M
+
+### InnoDB options
+# innodb
+percona_mysql_innodb: force
+# innodb_buffer_pool_size
+percona_mysql_innodb_buffer_pool_size_mb: "{{ ( ansible_memtotal_mb / 2 ) | int }}"
+# innodb_buffer_pool_instances
+percona_mysql_innodb_buffer_pool_instances: 1
+# innodb_old_blocks_time
+percona_mysql_innodb_old_blocks_time: 1000
+# innodb_log_buffer_size
+percona_mysql_innodb_log_buffer_size: 8M
+# innodb_flush_log_at_trx_commit
+percona_mysql_innodb_flush_log_at_trx_commit: 2
+# innodb_flush_method
+percona_mysql_innodb_flush_method: O_DIRECT
+# innodb_io_capacity
+percona_mysql_innodb_io_capacity: 200
+# innodb_log_file_size
+percona_mysql_innodb_log_file_size: 64M
+# innodb_file_per_table
+percona_mysql_innodb_file_per_table: 1
+# innodb_open_files
+percona_mysql_innodb_open_files: 2048
+# innodb_file_format
+percona_mysql_innodb_file_format: Barracuda
+# innodb_file_format_max
+percona_mysql_innodb_file_format_max: Barracuda
+# innodb_write_io_threads
+percona_mysql_innodb_write_io_threads: 4
+# innodb_read_io_threads
+percona_mysql_innodb_read_io_threads: 4
+# innodb_thread_concurrency
+percona_mysql_innodb_thread_concurrency: 0
+# innodb_concurrency_tickets
+percona_mysql_innodb_concurrency_tickets: 10000
+# innodb_support_xa
+percona_mysql_innodb_support_xa: on
+# innodb_autoinc_lock_mode
+percona_mysql_innodb_autoinc_lock_mode: 2
+# innodb_stats_on_metadata
+percona_mysql_innodb_stats_on_metadata: 0
+
+### Replication options
+# Binlog Directory
+percona_mysql_binlog_dir: /var/lib/mysql-binlogs
+# server-id
+percona_mysql_server_id: "{{ ansible_default_ipv4.address|replace('.','') | int }}"
+# auto_increment_increment
+percona_mysql_auto_increment_increment: 1
+# auto_increment_offset
+percona_mysql_auto_increment_offset: 1
+# skip-slave-start
+percona_mysql_skip_slave_start: 1
+# master-info-file
+percona_mysql_master_info_file: master.info
+# log-bin
+percona_mysql_log_bin: mysql-bin
+# log-bin-index
+percona_mysql_log_bin_index: mysql-bin.index
+# max_binlog_size
+percona_mysql_max_binlog_size: 100M
+# log-slave-updates
+percona_mysql_log_slave_updates: 1
+# binlog-format
+percona_mysql_binlog_format: ROW
+# sync_binlog
+percona_mysql_sync_binlog: 0
+# expire_logs_days
+percona_mysql_expire_logs_days: 7
+# relay-log-info-file
+percona_mysql_relay_log_info_file: mysql-relay.info
+# relay-log
+percona_mysql_relay_log: mysql-relay
+# relay-log-index
+percona_mysql_relay_log_index: mysql-relay.index
+# relay_log_purge
+percona_mysql_relay_log_purge: 1
+
+### Logging options
+# logging directory
+percona_mysql_log_dir: /var/log/mysql
+# log-error
+percona_mysql_log_error: mysql_error.log
+# general-log
+percona_mysql_general_log: 0
+# general_log_file
+percona_mysql_general_log_file: mysql_general.log
+# slow-query-log
+percona_mysql_slow_query_log: 1
+# slow_query_log_file
+percona_mysql_slow_query_log_file: mysql_slow.log
+# slow_query_log_use_global_control
+percona_mysql_slow_query_log_use_global_control: all
+# long_query_time
+percona_mysql_long_query_time: 2
+# log-slow-slave-statements
+percona_mysql_log_slow_slave_statements: 1
+# log-slow-admin-statements
+percona_mysql_log_slow_admin_statements: 1
+# log_slow_sp_statements
+percona_mysql_log_slow_sp_statements: 1
+# slow_query_log_timestamp_always
+percona_mysql_slow_query_log_timestamp_always: 1
+# slow_query_log_timestamp_precision
+percona_mysql_slow_query_log_timestamp_precision: 1
+# log_slow_verbosity
+percona_mysql_log_slow_verbosity: standard
+# log_slow_filter
+percona_mysql_slow_filter: "''"
+# log_slow_rate_type
+percona_mysql_log_slow_rate_type: session
+# log_slow_rate_limit
+percona_mysql_log_slow_rate_limit: 1
+# slow_query_log_always_write_time
+percona_mysql_slow_query_log_always_write_time: 10

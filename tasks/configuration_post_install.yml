@@ -1,0 +1,43 @@
+---
+- include: configuration_mysql_dir.yml
+
+- name: install mysql system tables
+  command:
+    mysql_install_db --user=mysql --datadir="{{ percona_mysql_data_dir }}"
+    creates="{{ percona_mysql_data_dir }}/mysql"
+
+- name: copying mysql.server init script to make startup script consistent across distributions
+  copy:
+    src=mysql.server
+    dest=/etc/init.d/mysql
+    owner=root
+    group=root
+    mode=0755
+    seuser=system_u
+    serole=object_r
+    setype=initrc_exec_t
+    selevel=s0
+    force=yes
+
+- name: ensure mysql has been stopped after the upgrade
+  service:
+    name="{{ percona_mysql_service_name }}"
+    state=stopped
+  when: percona_mysql_upgrade and (percona_mysql_pkg_check_redhat.changed or percona_mysql_pkg_check_debian.changed)
+
+- name: start mysql
+  service:
+    name="{{ percona_mysql_service_name }}"
+    state=started
+    enabled=yes
+
+- name: optionally execute mysql_upgrade after an upgrade has been performed
+  command:
+    mysql_upgrade --skip-write-binlog
+  when: percona_mysql_check_upgrade and (percona_mysql_pkg_check_redhat.changed or percona_mysql_pkg_check_debian.changed)
+
+- name: ensure percona database exists
+  mysql_db:
+    name=percona
+    state=present
+    login_unix_socket=/var/run/mysqld/mysqld.sock

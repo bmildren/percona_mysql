@@ -1,0 +1,130 @@
+---
+- name: create and manage percona_mysql_tmp_dir
+  file:
+    path={{ percona_mysql_tmp_dir }}
+    owner=mysql
+    group=mysql
+    mode=0750
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_tmp_t
+    selevel=s0
+    state=directory
+  register: percona_mysql_tmp_dir_check
+  when: percona_mysql_tmp_dir != percona_mysql_data_dir and percona_mysql_tmp_dir != "/tmp"
+
+- name: create context mapping for percona_mysql_tmp_dir
+  command:
+    semanage fcontext -a -t mysqld_tmp_t "{{ percona_mysql_tmp_dir }}(/.*)?"
+  when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled' and percona_mysql_tmp_dir_check.changed
+  tags: percona_mysql_manage_security
+
+- name: create and manage percona_mysql_log_dir
+  file:
+    path={{ percona_mysql_log_dir }}
+    owner=mysql
+    group=mysql
+    mode=0750
+    seuser=system_u
+    serole=object_r
+    setype=var_log_t
+    selevel=s0
+    state=directory
+  register: percona_mysql_log_dir_check
+  when: percona_mysql_log_dir != percona_mysql_data_dir and percona_mysql_log_dir != "/var/log"
+
+- name: create context mapping for percona_mysql_log_dir
+  command:
+    semanage fcontext -a -t var_log_t "{{ percona_mysql_log_dir }}"
+  when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled' and percona_mysql_log_dir_check.changed
+  tags: percona_mysql_manage_security
+
+- name: create context mapping for percona_mysql_log_dir
+  command:
+    semanage fcontext -a -t mysqld_log_t "{{ percona_mysql_log_dir }}(/.*)?"
+  when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled' and percona_mysql_log_dir_check.changed
+  tags: percona_mysql_manage_security
+
+- name: create and manage percona_mysql_binlog_dir
+  file:
+    path={{ percona_mysql_binlog_dir }}
+    owner=mysql
+    group=mysql
+    mode=0750
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_db_t
+    selevel=s0
+    state=directory
+  register: percona_mysql_binlog_dir_check
+  when: percona_mysql_binlog_dir != percona_mysql_data_dir and percona_mysql_binlog_dir != "/var/log"
+
+- name: create context mapping for mysql_binlog_dir
+  command:
+    semanage fcontext -a -t mysqld_db_t "{{ percona_mysql_binlog_dir }}(/.*)?"
+  when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled' and percona_mysql_binlog_dir_check.changed
+  tags: percona_mysql_manage_security
+
+- name: create and manage percona_mysql_data_dir
+  file:
+    path={{ percona_mysql_data_dir }}
+    owner=mysql
+    group=mysql
+    mode=0750
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_db_t
+    selevel=s0
+    state=directory
+  register: percona_mysql_data_dir_check
+
+- name: create context mapping for mysql_data_dir
+  command:
+    semanage fcontext -a -t mysqld_db_t "{{ percona_mysql_data_dir }}(/.*)?"
+  when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled' and percona_mysql_data_dir_check.changed
+  tags: percona_mysql_manage_security
+
+- name: check if /etc/apparmor.d/local directory exists
+  stat:
+    path=/etc/apparmor.d/local
+  changed_when: false
+  register: percona_mysql_apparmor_check
+  when: ansible_os_family == 'Debian'
+  tags: percona_mysql_manage_security
+
+- name: copy and manage local usr.sbin.mysqld 
+  template:
+    src=usr.sbin.mysqld.j2
+    dest=/etc/apparmor.d/local/usr.sbin.mysqld
+    owner=root
+    group=root
+    mode=0644
+  register: percona_mysql_apparmor
+  when: ansible_os_family == 'Debian' and (percona_mysql_apparmor_check.stat.isdir is defined and percona_mysql_apparmor_check.isdir)
+  tags: percona_mysql_manage_security
+
+- name: reload apparmor service if the local usr.sbin.mysqld has changed
+  service:
+    name: apparmor
+    state: reloaded
+  when: ansible_os_family == 'Debian' and percona_mysql_apparmor.changed
+  tags: percona_mysql_manage_security
+
+- name: check if error log has been created
+  stat:
+    path={{ percona_mysql_log_dir }}/{{ percona_mysql_log_error }}
+  changed_when: false
+  register: percona_mysql_error_log_check
+
+- name: create error log file
+  file:
+    path={{ percona_mysql_log_dir }}/{{ percona_mysql_log_error }}
+    owner=mysql
+    group=root
+    mode=0640
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_log_t
+    selevel=s0
+    state=touch
+  when: percona_mysql_error_log_check.stat.exists != true

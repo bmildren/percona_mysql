@@ -1,0 +1,24 @@
+### {{ ansible_managed }}
+### Installed in /etc/logrotate.d/
+### Execute /usr/sbin/logrotate -d /etc/logrotate.d/mysql_slow to test config
+### Preferably set use_global_long_query_time = ON / slow_query_log_use_global_control = 'long_query_time' | 'all'
+### Can use FLUSH SLOW LOGS; on mysql 5.5+
+
+{{ percona_mysql_log_dir }}/mysql_slow.log {
+    create 660 mysql mysql
+    daily
+    minsize 512M
+    rotate 7
+    notifempty
+    missingok
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+    {% if percona_mysql_server_version|replace(".","") < 55 %}
+       env HOME=/root/ `which mysql` -e 'select @@global.long_query_time into @lqt_save; set global long_query_time=2000; select sleep(2); FLUSH LOGS; select sleep(2); set global long_query_time=@lqt_save'
+    {% else %}
+       env HOME=/root/ `which mysql` -e 'select @@global.long_query_time into @lqt_save; set global long_query_time=2000; select sleep(2); FLUSH SLOW LOGS; select sleep(2); set global long_query_time=@lqt_save'
+    {% endif %}
+    endscript
+}

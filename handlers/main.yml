@@ -1,0 +1,6 @@
+---
+- name: restart mysql
+  service:
+    name={{ percona_mysql_service_name }}
+    state=restarted
+  when: percona_mysql_force_restart == 1

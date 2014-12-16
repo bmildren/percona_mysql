@@ -1,0 +1,26 @@
+---
+- name: manage mysql error log using logrotate
+  template:
+    src=mysql_logrotate.j2
+    dest=/etc/logrotate.d/mysql
+    owner=root
+    group=root
+    mode=0644
+    seuser=system_u
+    serole=object_r
+    setype=etc_t
+    selevel=s0
+  tags: percona_mysql_manage_logs
+
+- name: manage mysql slow log using logrotate
+  template:
+    src=mysql_slow_logrotate.j2
+    dest=/etc/logrotate.d/mysql_slow
+    owner=root
+    group=root
+    mode=0644
+    seuser=system_u
+    serole=object_r
+    setype=etc_t
+    selevel=s0
+  tags: percona_mysql_manage_logs

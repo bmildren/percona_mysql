@@ -1,0 +1,11 @@
+### {{ ansible_managed }}
+# Site-specific additions and overrides for usr.sbin.mysqld.
+# For more details, please see /etc/apparmor.d/local/README.
+  {{ percona_mysql_data_dir }}/ r,
+  {{ percona_mysql_data_dir }}/** rwk,
+  {{ percona_mysql_binlog_dir }}/ r,
+  {{ percona_mysql_binlog_dir }}/* rw,
+  {{ percona_mysql_log_dir }}/ r,
+  {{ percona_mysql_log_dir }}/* rw,
+  {{ percona_mysql_tmp_dir }}/* rw,
+  {{ percona_mysql_tmp_dir }}/ rw,
