@@ -4,3 +4,67 @@
     name={{ percona_mysql_service_name }}
     state=restarted
   when: percona_mysql_force_restart == 1
+
+- name: Update percona_mysql_general_variables
+  mysql_variables:
+    variable={{ item.value.variable }}
+    value={{ item.value.value }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  when: "{{ item.value.include }} and {{ item.value.dynamic }} and percona_mysql_force_restart == 0"
+  with_dict: percona_mysql_general_variables
+
+- name: Update percona_mysql_percona_general_variables
+  mysql_variables:
+    variable={{ item.value.variable }}
+    value={{ item.value.value }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  when: "{{ item.value.include }} and {{ item.value.dynamic }} and percona_mysql_force_restart == 0"
+  with_dict: percona_mysql_percona_general_variables
+
+- name: Update percona_mysql_connection_variables
+  mysql_variables:
+    variable={{ item.value.variable }}
+    value={{ item.value.value }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  when: "{{ item.value.include }} and {{ item.value.dynamic }} and percona_mysql_force_restart == 0"
+  with_dict: percona_mysql_connection_variables
+
+- name: Update percona_mysql_cache_variables
+  mysql_variables:
+    variable={{ item.value.variable }}
+    value={{ item.value.value }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  when: "{{ item.value.include }} and {{ item.value.dynamic }} and percona_mysql_force_restart == 0"
+  with_dict: percona_mysql_cache_variables
+
+- name: Update percona_mysql_innodb_variables
+  mysql_variables:
+    variable={{ item.value.variable }}
+    value={{ item.value.value }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  when: "{{ item.value.include }} and {{ item.value.dynamic }} and percona_mysql_force_restart == 0"
+  with_dict: percona_mysql_innodb_variables
+
+- name: Update percona_mysql_replication_variables
+  mysql_variables:
+    variable={{ item.value.variable }}
+    value={{ item.value.value }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  when: "{{ item.value.include }} and {{ item.value.dynamic }} and percona_mysql_force_restart == 0"
+  with_dict: percona_mysql_replication_variables
+
+- name: Update percona_mysql_logging_variables
+  mysql_variables:
+    variable={{ item.value.variable }}
+    value={{ item.value.value }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  when: "{{ item.value.include }} and {{ item.value.dynamic }} and percona_mysql_force_restart == 0"
+  with_dict: percona_mysql_logging_variables
+
+- name: Update percona_mysql_percona_logging_variables
+  mysql_variables:
+    variable={{ item.value.variable }}
+    value={{ item.value.value }}
+    login_unix_socket=/var/run/mysqld/mysqld.sock
+  when: "{{ item.value.include }} and {{ item.value.dynamic }} and percona_mysql_force_restart == 0"
+  with_dict: percona_mysql_percona_logging_variables

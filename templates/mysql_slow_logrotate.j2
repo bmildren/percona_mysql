@@ -4,7 +4,7 @@
 ### Preferably set use_global_long_query_time = ON / slow_query_log_use_global_control = 'long_query_time' | 'all'
 ### Can use FLUSH SLOW LOGS; on mysql 5.5+
 
-{{ percona_mysql_log_dir }}/mysql_slow.log {
+{{ "%s/%s"|format(percona_mysql_log_dir, percona_mysql_logdir_variables.percona_mysql_slow_query_log_file.value) }} {
     create 660 mysql mysql
     daily
     minsize 512M

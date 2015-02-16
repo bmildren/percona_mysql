@@ -3,8 +3,8 @@
 
 - name: install mysql system tables
   command:
-    mysql_install_db --user=mysql --datadir="{{ percona_mysql_data_dir }}"
-    creates="{{ percona_mysql_data_dir }}/mysql"
+    mysql_install_db --user=mysql --datadir="{{ percona_mysql_data_dir.value }}"
+    creates="{{ percona_mysql_data_dir.value }}/mysql"
 
 - name: copying mysql.server init script to make startup script consistent across distributions
   copy:

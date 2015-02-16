@@ -1,7 +1,7 @@
 ---
 - name: create and manage percona_mysql_tmp_dir
   file:
-    path={{ percona_mysql_tmp_dir }}
+    path={{ percona_mysql_tmp_dir.value }}
     owner=mysql
     group=mysql
     mode=0750
@@ -15,7 +15,7 @@
 
 - name: create context mapping for percona_mysql_tmp_dir
   command:
-    semanage fcontext -a -t mysqld_tmp_t "{{ percona_mysql_tmp_dir }}(/.*)?"
+    semanage fcontext -a -t mysqld_tmp_t "{{ percona_mysql_tmp_dir.value }}(/.*)?"
   when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled' and percona_mysql_tmp_dir_check.changed
   tags: percona_mysql_manage_security
 
@@ -67,7 +67,7 @@
 
 - name: create and manage percona_mysql_data_dir
   file:
-    path={{ percona_mysql_data_dir }}
+    path={{ percona_mysql_data_dir.value }}
     owner=mysql
     group=mysql
     mode=0750
@@ -80,7 +80,7 @@
 
 - name: create context mapping for mysql_data_dir
   command:
-    semanage fcontext -a -t mysqld_db_t "{{ percona_mysql_data_dir }}(/.*)?"
+    semanage fcontext -a -t mysqld_db_t "{{ percona_mysql_data_dir.value }}(/.*)?"
   when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled' and percona_mysql_data_dir_check.changed
   tags: percona_mysql_manage_security
 
@@ -112,13 +112,13 @@
 
 - name: check if error log has been created
   stat:
-    path={{ percona_mysql_log_dir }}/{{ percona_mysql_log_error }}
+    path={{ percona_mysql_log_dir }}/{{ percona_mysql_logdir_variables.percona_mysql_log_error.value }}
   changed_when: false
   register: percona_mysql_error_log_check
 
 - name: create error log file
   file:
-    path={{ percona_mysql_log_dir }}/{{ percona_mysql_log_error }}
+    path={{ percona_mysql_log_dir }}/{{ percona_mysql_logdir_variables.percona_mysql_log_error.value }}
     owner=mysql
     group=root
     mode=0640

@@ -51,7 +51,7 @@
 
 - name: check if mysql is listening on the percona_mysql_port
   wait_for:
-    port={{ percona_mysql_port }}
+    port={{ percona_mysql_port.value }}
     timeout=1
     state=started
   changed_when: false
@@ -60,8 +60,8 @@
 
 - name: create context mapping for non-standard percona_mysql_port (if the port is not already listening)
   command:
-    semanage port -a -t mysqld_port_t -p tcp {{ percona_mysql_port }}
-  when: ansible_os_family == 'RedHat' and {{ percona_mysql_port }} != 3306 and percona_mysql_port_check.failed
+    semanage port -a -t mysqld_port_t -p tcp {{ percona_mysql_port.value }}
+  when: ansible_os_family == 'RedHat' and {{ percona_mysql_port.value }} != 3306 and percona_mysql_port_check.failed
   tags: percona_mysql_manage_security
 
 - name: copy my.cnf
@@ -75,7 +75,16 @@
     serole=object_r
     setype=mysqld_etc_t
     selevel=s0
-  notify: restart mysql
+  notify:
+    - restart mysql
+    - Update percona_mysql_general_variables
+    - Update percona_mysql_percona_general_variables
+    - Update percona_mysql_connection_variables
+    - Update percona_mysql_cache_variables
+    - Update percona_mysql_innodb_variables
+    - Update percona_mysql_replication_variables
+    - Update percona_mysql_logging_variables
+    - Update percona_mysql_percona_logging_variables
 
 - name: check if we're installing or upgrading (default is install)
   set_fact:

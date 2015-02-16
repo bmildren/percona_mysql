@@ -3,7 +3,7 @@
 ### Execute /usr/sbin/logrotate -d /etc/logrotate.d/mysql to test config
 ### Can use FLUSH ERROR LOGS; on mysql 5.5+
 
-{{ percona_mysql_log_dir }}/mysql_error.log {
+{{ "%s/%s"|format(percona_mysql_log_dir, percona_mysql_logdir_variables.percona_mysql_log_error.value) }} {
     create 640 mysql root
     daily
     minsize 512M
