@@ -48,6 +48,8 @@
     state=started
     enabled=yes
 
+- include: install_plugins.yml
+
 - name: optionally execute mysql_upgrade after an upgrade has been performed
   command:
     mysql_upgrade --skip-write-binlog

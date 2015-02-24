@@ -17,6 +17,22 @@
     update_cache=yes
   when: percona_mysql_apt_repo.changed
 
+- name: install jemalloc package on debian family hosts
+  apt:
+    name=libjemalloc1
+    state=present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  when: percona_mysql_include_tokudb_variables or percona_mysql_include_jemalloc_variables
+
+- name: install numactl package on debian family hosts
+  apt:
+    name=numactl
+    state=present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  when: percona_mysql_include_numa_variables
+
 - name: install mysql package on debian family hosts
   apt:
     name="{{ percona_mysql_pkg }}"

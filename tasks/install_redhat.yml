@@ -5,6 +5,18 @@
     state=present
   with_items: percona_mysql_repo
 
+- name: install jemalloc package on red hat family hosts
+  yum:
+    name=jemalloc
+    state=present
+  when: percona_mysql_include_tokudb_variables or percona_mysql_include_jemalloc_variables
+
+- name: install numactl package on red hat family hosts
+  yum:
+    name=numactl
+    state=present
+  when: percona_mysql_include_numa_variables
+
 - name: install mysql package on red hat family hosts
   yum:
     name="{{ percona_mysql_pkg }}"

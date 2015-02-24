@@ -10,8 +10,6 @@ percona_mysql_pkg: percona-server-{{ percona_mysql_pkg_type }}-{{ percona_mysql_
 percona_mysql_additional_pkgs:
   - python-mysqldb
   - percona-toolkit
-  - jemalloc
-  - numactl
 
 percona_mysql_backup_pkgs:
   - percona-xtrabackup
