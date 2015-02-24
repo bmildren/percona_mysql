@@ -1,0 +1,115 @@
+---
+#---------------------------------------------------------------
+# Connectivity options
+#---------------------------------------------------------------
+percona_mysql_port:
+  comment:
+  option: port
+  value: 3306
+
+percona_mysql_connection_variables:
+  percona_mysql_bind_address:
+    comment:
+    option: bind-address
+    variable:
+    value: "::"
+    include: true
+    dynamic: false
+  percona_mysql_back_log:
+    comment:
+    option: back_log
+    variable:
+    value: 2048
+    include: true
+    dynamic: false
+  percona_mysql_skip_name_resolve:
+    comment:
+    option: skip-name-resolve
+    variable:
+    value: 0
+    include: true
+    dynamic: false
+  percona_mysql_safe_user_create:
+    comment:
+    option: safe-user-create
+    variable:
+    value: 1
+    include: true
+    dynamic: false
+  percona_mysql_secure_auth:
+    comment:
+    option: secure-auth
+    variable: secure_auth
+    value: 'ON'
+    include: true
+    dynamic: true
+  percona_mysql_read_only:
+    comment:
+    option: read_only
+    variable: read_only
+    value: 'OFF'
+    include: true
+    dynamic: true
+  percona_mysql_max_connections:
+    comment:
+    option: max_connections
+    variable: max_connections
+    value: 500
+    include: true
+    dynamic: true
+  percona_mysql_max_user_connections:
+    comment:
+    option: max_user_connections
+    variable: max_user_connections
+    value: 400
+    include: true
+    dynamic: true
+  percona_mysql_max_connect_errors:
+    comment:
+    option: max_connect_errors
+    variable: max_connect_errors
+    value: 1000000
+    include: true
+    dynamic: true
+  percona_mysql_max_allowed_packet:
+    comment: "Currently we have to supply value in bytes here to enable the dynamic refresh to work"
+    option: max_allowed_packet
+    variable: max_allowed_packet
+    value: 16777216
+    include: true
+    dynamic: true
+  percona_mysql_net_read_timeout:
+    comment:
+    option: net_read_timeout
+    variable: net_read_timeout
+    value: 30
+    include: true
+    dynamic: true
+  percona_mysql_net_write_timeout:
+    comment:
+    option: net_write_timeout
+    variable: net_write_timeout
+    value: 60
+    include: true
+    dynamic: true
+  percona_mysql_interactive_timeout:
+    comment:
+    option: interactive_timeout
+    variable: interactive_timeout
+    value: 14400
+    include: true
+    dynamic: true
+  percona_mysql_wait_timeout:
+    comment:
+    option: wait_timeout
+    variable: wait_timeout
+    value: 14400
+    include: true
+    dynamic: true
+  percona_mysql_thread_cache_size:
+    comment:
+    option: thread_cache_size
+    variable: thread_cache_size
+    value: 64
+    include: true
+    dynamic: true

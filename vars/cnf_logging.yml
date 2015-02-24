@@ -1,0 +1,72 @@
+---
+#---------------------------------------------------------------
+# Logging options
+#---------------------------------------------------------------
+percona_mysql_log_dir: /var/log/mysql
+
+percona_mysql_logdir_variables:
+  percona_mysql_log_error:
+    comment:
+    option: log-error
+    variable:
+    value: mysql_error.log
+    include: true
+    dynamic: false
+  percona_mysql_general_log_file:
+    comment:
+    option: general_log_file
+    variable: general_log_file
+    value: mysql_general.log
+    include: true
+    dynamic: true
+  percona_mysql_slow_query_log_file:
+    comment:
+    option: slow_query_log_file
+    variable: slow_query_log_file
+    value: mysql_slow.log
+    include: true
+    dynamic: true
+
+percona_mysql_logging_variables:
+  percona_mysql_general_log:
+    comment:
+    option: general-log
+    variable: general_log
+    value: 'OFF'
+    include: true
+    dynamic: true
+  percona_mysql_slow_query_log:
+    comment:
+    option: slow-query-log
+    variable: slow_query_log
+    value: 'ON'
+    include: true
+    dynamic: true
+  percona_mysql_long_query_time:
+    comment:
+    option: long_query_time
+    variable: long_query_time
+    value: 2
+    include: true
+    dynamic: true
+  percona_mysql_log_slow_admin_statements:
+    comment:
+    option: log-slow-admin-statements
+    variable:
+    value: 1
+    include: true
+    dynamic: false
+  percona_mysql_log_slow_slave_statements:
+    comment:
+    option: log-slow-slave-statements
+    variable:
+    value: 1
+    include: true
+    dynamic: false
+  percona_mysql_log_warnings:
+    comment:
+    option: log-warnings
+    variable: log_warnings
+    value: 1
+    include: true
+    dynamic: true

@@ -1,0 +1,87 @@
+---
+#---------------------------------------------------------------
+# Percona audit logging options
+#---------------------------------------------------------------
+percona_mysql_audit_log_dir: /var/log/mysql
+
+percona_mysql_audit_logdir_variables:
+  percona_mysql_audit_log_file:
+    comment:
+    option: audit_log_file
+    variable:
+    value: mysql_audit.log
+    include: true
+    dynamic: false
+
+percona_mysql_audit_logging_variables:
+  percona_mysql_audit_log_strategy:
+    comment: "Can be set to ASYNCHRONOUS, PERFORMANCE, SEMISYNCHRONOUS, SYNCHRONOUS"
+    option: audit_log_strategy
+    variable:
+    value: ASYNCHRONOUS
+    include: true
+    dynamic: false
+  percona_mysql_audit_log_buffer_size:
+    comment:
+    option: audit_log_buffer_size
+    variable:
+    value: 4096
+    include: true
+    dynamic: false
+  percona_mysql_audit_log_policy:
+    comment: "Can be set to ALL, LOGINS, QUERIES, NONE"
+    option: audit_log_policy
+    variable: audit_log_policy
+    value: ALL
+    include: true
+    dynamic: true
+  percona_mysql_audit_log_format:
+    comment: "Can be set to OLD, NEW, CSV, JSON"
+    option: audit_log_format
+    variable:
+    value: JSON
+    include: true
+    dynamic: false
+  percona_mysql_audit_log_handler:
+    comment: "Can be set to FILE, SYSLOG"
+    option: audit_log_handler
+    variable:
+    value: FILE
+    include: true
+    dynamic: false
+  percona_mysql_audit_log_syslog_priority:
+    comment:
+    option: audit_log_syslog_priority
+    variable:
+    value: LOG_INFO
+    include: true
+    dynamic: false
+  percona_mysql_audit_log_syslog_facility:
+    comment:
+    option: audit_log_syslog_facility
+    variable:
+    value: LOG_USER
+    include: true
+    dynamic: false
+  percona_mysql_audit_log_syslog_ident:
+    comment: "Can be set to FILE, SYSLOG"
+    option: audit_log_syslog_ident
+    variable:
+    value: percona-audit
+    include: true
+    dynamic: false
+  percona_mysql_audit_log_rotate_on_size:
+    comment:
+    option: audit_log_rotate_on_size
+    variable:
+    value: 0
+    include: true
+    dynamic: false
+  percona_mysql_audit_log_rotations:
+    comment:
+    option: audit_log_rotate_on_size
+    variable:
+    value: 0
+    include: true
+    dynamic: false
+

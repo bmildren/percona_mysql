@@ -1,0 +1,146 @@
+---
+#---------------------------------------------------------------
+# InnoDB options
+#---------------------------------------------------------------
+percona_mysql_innodb_buffer_pool_size_mb:
+  comment: "This value should be assigned in MB" 
+  option: innodb_buffer_pool_size
+  variable:
+  value: "{{ ( ansible_memtotal_mb / 4 ) | int }}"
+  include: true
+  dynamic: false
+
+percona_mysql_innodb_variables:
+  percona_mysql_innodb:
+    comment:
+    option: innodb
+    variable:
+    value: force
+    include: true
+    dynamic: false
+  percona_mysql_innodb_buffer_pool_instances:
+    comment:
+    option: innodb_buffer_pool_instances
+    variable:
+    value: 1
+    include: true
+    dynamic: false
+  percona_mysql_innodb_old_blocks_time:
+    comment:
+    option: innodb_old_blocks_time
+    variable: innodb_old_blocks_time
+    value: 1000
+    include: true
+    dynamic: true
+  percona_mysql_innodb_log_buffer_size:
+    comment:
+    option: innodb_log_buffer_size
+    variable:
+    value: 8M
+    include: true
+    dynamic: false
+  percona_mysql_innodb_flush_log_at_trx_commit:
+    comment: "Can be set to 0, InnoDB log buffer written to the log file every second and flushed to disk.  1, InnoDB log buffer written to the log file on every commit and flushed to disk.  2, InnoDB log buffer written to the log file on every commit and flushed to disk every second"
+    option: innodb_flush_log_at_trx_commit
+    variable: innodb_flush_log_at_trx_commit
+    value: 2
+    include: true
+    dynamic: true
+  percona_mysql_innodb_flush_method:
+    comment: "Can be set to fsync, O_DSYNC, O_DIRECT, O_DIRECT_NO_FSYNC (From 5.6.7), async_unbuffered (Windows)"
+    option: innodb_flush_method
+    variable:
+    value: O_DIRECT
+    include: true
+    dynamic: false
+  percona_mysql_innodb_io_capacity:
+    comment:
+    option: innodb_io_capacity
+    variable: innodb_io_capacity
+    value: 200
+    include: true
+    dynamic: true
+  percona_mysql_innodb_log_file_size:
+    comment:
+    option: innodb_log_file_size
+    variable:
+    value: 64M
+    include: true
+    dynamic: false
+  percona_mysql_innodb_file_per_table:
+    comment:
+    option: innodb_file_per_table
+    variable: innodb_file_per_table
+    value: 'ON'
+    include: true
+    dynamic: true
+  percona_mysql_innodb_open_files:
+    comment:
+    option: innodb_open_files
+    variable: innodb_open_files
+    value: 1024
+    include: true
+    dynamic: true
+  percona_mysql_innodb_file_format:
+    comment: "Antelope, Barracuda"
+    option: innodb_file_format
+    variable: innodb_file_format
+    value: Barracuda
+    include: true
+    dynamic: true
+  percona_mysql_innodb_file_format_max:
+    comment: "Antelope, Barracuda"
+    option: innodb_file_format_max
+    variable: innodb_file_format_max
+    value: Barracuda
+    include: true
+    dynamic: true
+  percona_mysql_innodb_write_io_threads:
+    comment:
+    option: innodb_write_io_threads
+    variable:
+    value: 4
+    include: true
+    dynamic: false
+  percona_mysql_innodb_read_io_threads:
+    comment:
+    option: innodb_read_io_threads
+    variable:
+    value: 4
+    include: true
+    dynamic: false
+  percona_mysql_innodb_thread_concurrency:
+    comment:
+    option: innodb_thread_concurrency
+    variable: innodb_thread_concurrency
+    value: 0
+    include: true
+    dynamic: true
+  percona_mysql_innodb_concurrency_tickets:
+    comment:
+    option: innodb_concurrency_tickets
+    variable: innodb_concurrency_tickets
+    value: 10000
+    include: true
+    dynamic: true
+  percona_mysql_innodb_support_xa:
+    comment:
+    option: innodb_support_xa
+    variable: innodb_support_xa
+    value: 'ON'
+    include: true
+    dynamic: true
+  percona_mysql_innodb_autoinc_lock_mode:
+    comment: "Can be set to 0, traditional.  1, consecutive.  2, interleaved."
+    option: innodb_autoinc_lock_mode
+    variable:
+    value: 2
+    include: true
+    dynamic: false
+  percona_mysql_innodb_stats_on_metadata:
+    comment:
+    option: innodb_stats_on_metadata
+    variable: innodb_stats_on_metadata
+    value: 'OFF'
+    include: true
+    dynamic: true

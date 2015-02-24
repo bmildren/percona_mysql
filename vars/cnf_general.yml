@@ -1,0 +1,78 @@
+---
+#---------------------------------------------------------------
+# General options
+#---------------------------------------------------------------
+percona_mysql_service_user:
+  comment:
+  option: user
+  value: mysql
+percona_mysql_base_dir:
+  comment:
+  option: basedir
+  value: /usr
+percona_mysql_data_dir:
+  comment:
+  option: datadir
+  value: /var/lib/mysql
+percona_mysql_tmp_dir:
+  comment:
+  option: tmpdir
+  value: /var/lib/mysql-tmp
+
+percona_mysql_general_variables:
+  percona_mysql_default_storage_engine:
+    comment:
+    option: default-storage-engine
+    variable: default_storage_engine
+    value: InnoDB
+    include: true
+    dynamic: true
+  percona_mysql_sql_mode:
+    comment: "http://dev.mysql.com/doc/refman/{{ percona_mysql_server_version }}/en/sql-mode.html"
+    option: sql-mode
+    variable: sql_mode
+    value: 'STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION'
+    include: true
+    dynamic: true
+  percona_mysql_sysdate_is_now:
+    comment:
+    option: sysdate-is-now
+    variable:
+    value: 0
+    include: true
+    dynamic: false
+  percona_mysql_transaction_isolation:
+    comment: "Can be set to READ-UNCOMMITTED, READ-COMMITTED, REPEATABLE-READ, SERIALIZABLE"
+    option: transaction-isolation
+    variable: tx_isolation
+    value: REPEATABLE-READ
+    include: true
+    dynamic: true
+  percona_mysql_character_set_server:
+    comment:
+    option: character-set-server
+    variable: character_set_server
+    value: utf8
+    include: true
+    dynamic: true
+  percona_mysql_collation_server:
+    comment:
+    option: collation-server
+    variable: collation_server
+    value: utf8_general_ci
+    include: true
+    dynamic: true
+  percona_mysql_event_scheduler:
+    comment:
+    option: event-scheduler
+    variable: event_scheduler
+    value: 'OFF'
+    include: true
+    dynamic: true
+  percona_mysql_performance_schema:
+    comment:
+    option: performance_schema
+    variable:
+    value: 0
+    include: true
+    dynamic: false

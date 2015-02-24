@@ -1,0 +1,54 @@
+{% macro print_item(config_item) -%}
+{% if config_item.comment -%}{{ "# %s: %s"|format(config_item.option, config_item.comment) }}
+{% endif %}
+{{ "%s = %s"|format(config_item.option.ljust(63), config_item.value) }}
+{{ caller () }}
+{%- endmacro -%}
+
+{% macro print_diritem(config_dir, config_item) -%}
+{% if config_item.comment -%}{{ "# %s"|format(config_item.comment) }}{% endif %}
+{{ "%s = %s/%s"|format(config_item.option.ljust(63), config_dir, config_item.value) }}
+{{ caller () }}
+{%- endmacro -%}
+
+{% macro render_item(config_item) -%}
+    {% call print_item(config_item) -%}
+    {%- endcall %}
+{%- endmacro -%}
+
+{% macro render_group(config_group) -%}
+    {% for config_item in config_group.itervalues() -%}
+        {% if config_item.include -%}
+            {% call print_item(config_item) -%}
+            {%- endcall %}
+        {%- endif %}
+    {%- endfor %}
+{%- endmacro -%}
+
+{% macro render_dirgroup(config_dir, config_group) -%}
+    {% for config_item in config_group.itervalues() -%}
+        {% if config_item.include -%}
+            {% call print_diritem(config_dir, config_item) -%}
+            {%- endcall %}
+        {%- endif %}
+    {%- endfor %}
+{%- endmacro -%}
+
+### {{ ansible_managed }}
+[mysqld]
+{% set percona_mysql_plugins = [] %}
+{% if percona_mysql_include_tokudb_variables %}{%- set _ = percona_mysql_plugins.append('tokudb=ha_tokudb.so') %}{%- set _ = percona_mysql_plugins.append('tokudb_file_map=ha_tokudb.so') %}{%- set _ = percona_mysql_plugins.append('tokudb_fractal_tree_info=ha_tokudb.so') %}{%- set _ = percona_mysql_plugins.append('tokudb_fractal_tree_block_map=ha_tokudb.so') %}{%- set _ = percona_mysql_plugins.append('tokudb_trx=ha_tokudb.so') %}{%- set _ = percona_mysql_plugins.append('tokudb_locks=ha_tokudb.so') %}{%- set _ = percona_mysql_plugins.append('tokudb_lock_waits=ha_tokudb.so') %}{% endif %}
+{% if percona_mysql_include_auditlog_variables %}{%- set _ = percona_mysql_plugins.append('audit_log=audit_log.so') %}{% endif %}
+{% if percona_mysql_plugins %}### Plugins
+plugin-load                                                     = {{ ";".join(percona_mysql_plugins) }}
+{% endif %}
+{% if percona_mysql_include_tokudb_variables %}### Percona tokudb options
+{{ render_group(percona_mysql_tokudb_variables) }}
+{% endif %}
+{% if percona_mysql_include_auditlog_variables %}### Percona audit logging options
+{{ render_dirgroup(percona_mysql_audit_log_dir, percona_mysql_audit_logdir_variables) }}{{ render_group(percona_mysql_audit_logging_variables) }}
+{% endif %}
+
+{% if percona_mysql_include_numa_variables %}[mysqld_safe]
+thp-setting                                                     = never
+{% endif %}

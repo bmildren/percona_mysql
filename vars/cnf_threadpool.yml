@@ -1,0 +1,75 @@
+---
+#---------------------------------------------------------------
+# Percona threadpooling options
+#---------------------------------------------------------------
+percona_mysql_threadpooling_variables:
+  percona_mysql_thread_handling:
+    comment:
+    option: thread_handling
+    variable:
+    value: pool-of-threads
+    include: true
+    dynamic: false
+  percona_mysql_extra_port:
+    comment:
+    option: extra_port
+    variable:
+    value: 3307
+    include: true
+    dynamic: false
+  percona_mysql_extra_max_connections:
+    comment:
+    option: extra_max_connections
+    variable: extra_max_connections
+    value: 20
+    include: true
+    dynamic: true
+  percona_mysql_thread_pool_max_threads:
+    comment:
+    option: thread_pool_max_threads
+    variable: thread_pool_max_threads
+    value: 100000
+    include: true
+    dynamic: true
+  percona_mysql_thread_pool_size:
+    comment:
+    option: thread_pool_size
+    variable: thread_pool_size
+    value: "{{ ansible_processor_cores }}"
+    include: true
+    dynamic: true
+  percona_mysql_thread_pool_high_prio_mode:
+    comment:
+    option: thread_pool_high_prio_mode
+    variable: thread_pool_high_prio_mode
+    value: transactions
+    include: true
+    dynamic: true
+  percona_mysql_thread_pool_high_prio_tickets:
+    comment:
+    option: thread_pool_high_prio_tickets
+    variable: thread_pool_high_prio_tickets
+    value: 4294967295
+    include: true
+    dynamic: true
+  percona_mysql_thread_pool_oversubscribe:
+    comment:
+    option: thread_pool_oversubscribe
+    variable: thread_pool_oversubscribe
+    value: 3
+    include: true
+    dynamic: true
+  percona_mysql_thread_pool_idle_timeout:
+    comment:
+    option: thread_pool_idle_timeout
+    variable: thread_pool_idle_timeout
+    value: 60
+    include: true
+    dynamic: true
+  percona_mysql_thread_pool_stall_limit:
+    comment:
+    option: thread_pool_stall_limit
+    variable: 
+    value: 500
+    include: true
+    dynamic: false

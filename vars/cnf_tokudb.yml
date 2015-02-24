@@ -1,0 +1,54 @@
+---
+#---------------------------------------------------------------
+# TokuDB options
+#---------------------------------------------------------------
+percona_mysql_tokudb_variables:
+  percona_mysql_tokudb_cache_size:
+    comment:
+    option: tokudb_cache_size
+    variable: tokudb_cache_size
+    value: "{{ ( ansible_memtotal_mb / 4 )|int * 1048576 }} "
+    include: true
+    dynamic: true
+  percona_mysql_tokudb_directio:
+    comment:
+    option: tokudb_directio
+    variable: tokudb_directio
+    value: 'OFF'
+    include: true
+    dynamic: true
+  percona_mysql_tokudb_row_format:
+    comment:
+    option: tokudb_row_format
+    variable: tokudb_row_format
+    value: tokudb_default
+    include: true
+    dynamic: true
+  percona_mysql_tokudb_commit_sync:
+    comment:
+    option: tokudb_commit_sync
+    variable: tokudb_commit_sync
+    value: 'ON'
+    include: true
+    dynamic: true
+  percona_mysql_tokudb_fsync_log_period:
+    comment:
+    option: tokudb_fsync_log_period
+    variable: tokudb_fsync_log_period
+    value: 0
+    include: true
+    dynamic: true
+  percona_mysql_tokudb_empty_scan:
+    comment:
+    option: tokudb_empty_scan
+    variable: tokudb_empty_scan
+    value: rl
+    include: true
+    dynamic: true
+  percona_mysql_tokudb_analyze_time:
+    comment:
+    option: tokudb_analyze_time
+    variable: tokudb_analyze_time
+    value: 5
+    include: true
+    dynamic: true

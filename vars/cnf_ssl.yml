@@ -1,0 +1,23 @@
+---
+percona_mysql_ssl_variables:
+  percona_mysql_innodb:
+    comment:
+    option: ssl-ca
+    variable:
+    value: ca-cert.pem
+    include: true
+    dynamic: false
+  percona_mysql_innodb_buffer_pool_instances:
+    comment:
+    option: ssl-cert
+    variable:
+    value: client-cert.pem
+    include: true
+    dynamic: false
+  percona_mysql_innodb_old_blocks_time:
+    comment:
+    option: ssl-key
+    variable:
+    value: client-key.pem
+    include: true
+    dynamic: false

@@ -1,0 +1,191 @@
+---
+#---------------------------------------------------------------
+# Replication options
+#---------------------------------------------------------------
+percona_mysql_binlog_dir: /var/lib/mysql-binlogs
+
+percona_mysql_replicationdir_variables:
+  percona_mysql_master_info_file:
+    comment:
+    option: master-info-file
+    variable:
+    value: master.info
+    include: true
+    dynamic: false
+  percona_mysql_log_bin:
+    comment:
+    option: log-bin
+    variable:
+    value: mysql-bin
+    include: true
+    dynamic: false
+  percona_mysql_log_bin_index:
+    comment:
+    option: log-bin-index
+    variable:
+    value: mysql-bin.index
+    include: true
+    dynamic: false
+  percona_mysql_relay_log_info_file:
+    comment:
+    option: relay_log_info_file
+    variable:
+    value: mysql-relay.info
+    include: true
+    dynamic: false
+  percona_mysql_relay_log:
+    comment:
+    option: relay-log
+    variable:
+    value: mysql-relay
+    include: true
+    dynamic: false
+  percona_mysql_relay_log_index:
+    comment:
+    option: relay_log_index
+    variable:
+    value: mysql-relay.index
+    include: true
+    dynamic: false
+
+percona_mysql_replication_variables:
+  percona_mysql_master_info_repository:
+    comment:
+    option: master-info-repository
+    variable: master_info_repository
+    value: FILE
+    include: false
+    dynamic: true
+  percona_mysql_relay_log_info_repository:
+    comment:
+    option: relay-log-info-repository
+    variable: relay_log_info_repository
+    value: FILE
+    include: false
+    dynamic: true
+  percona_mysql_server_id:
+    comment:
+    option: server-id
+    variable: server_id
+    value: "{{ ansible_default_ipv4.address|replace('.','')|default(1) | int }}"
+    include: true
+    dynamic: true
+  percona_mysql_auto_increment_increment:
+    comment:
+    option: auto_increment_increment
+    variable: auto_increment_increment
+    value: 1
+    include: true
+    dynamic: true
+  percona_mysql_auto_increment_offset:
+    comment:
+    option: auto_increment_offset
+    variable: auto_increment_offset
+    value: 1
+    include: true
+    dynamic: true
+  percona_mysql_skip_slave_start:
+    comment:
+    option: skip-slave-start
+    variable:
+    value: 1
+    include: true
+    dynamic: false
+  percona_mysql_max_binlog_size:
+    comment: "Currently we have to supply value in bytes here to enable the dynamic refresh to work"
+    option: max_binlog_size
+    variable: max_binlog_size
+    value: 104857600
+    include: true
+    dynamic: true
+  percona_mysql_log_slave_updates:
+    comment:
+    option: log-slave-updates
+    variable:
+    value: 1
+    include: true
+    dynamic: false
+  percona_mysql_binlog_format:
+    comment: "Can be set to STATEMENT, MIXED, ROW"
+    option: binlog-format
+    variable: binlog_format
+    value: ROW
+    include: true
+    dynamic: true
+  percona_mysql_binlog_row_image:
+    comment:
+    option: binlog_row_image
+    variable: binlog_row_image
+    value: FULL
+    include: true
+    dynamic: true
+  percona_mysql_binlog_rows_query_log_events:
+    comment:
+    option: binlog-rows-query-log-events
+    variable: binlog_rows_query_log_events
+    value: 'OFF'
+    include: true
+    dynamic: true
+  percona_mysql_sync_binlog:
+    comment:
+    option: sync_binlog
+    variable: sync_binlog
+    value: 0
+    include: true
+    dynamic: true
+  percona_mysql_expire_logs_days:
+    comment:
+    option: expire_logs_days
+    variable: expire_logs_days
+    value: 7
+    include: true
+    dynamic: true
+  percona_mysql_relay_log_purge:
+    comment:
+    option: relay_log_purge
+    variable: relay_log_purge
+    value: 'ON'
+    include: true
+    dynamic: true
+  percona_mysql_slave_compressed_protocol:
+    comment:
+    option: slave_compressed_protocol
+    variable: slave_compressed_protocol
+    value: 'OFF'
+    include: false
+    dynamic: true
+  percona_mysql_slave_parallel_workers:
+    comment:
+    option: slave-parallel-workers
+    variable: slave_parallel_workers
+    value: 0
+    include: false
+    dynamic: true
+  percona_mysql_slave_checkpoint_period:
+    comment:
+    option: slave-checkpoint-period
+    variable: slave_checkpoint_period
+    value: 300
+    include: false
+    dynamic: true
+  percona_mysql_slave_checkpoint_group:
+    comment:
+    option: slave-checkpoint-group
+    variable: slave_checkpoint_group
+    value: 512
+    include: false
+    dynamic: true
+  percona_mysql_slave_pending_jobs_size_max:
+    comment: "Currently we have to supply value in bytes here to enable the dynamic refresh to work"
+    option: slave-pending-jobs-size-max
+    variable: slave_pending_jobs_size_max
+    value: 16777216
+    include: false
+    dynamic: true
+  percona_mysql_replicate_wild_ignore_table:
+    comment:
+    option: replicate-wild-ignore-table
+    variable:
+    value:
+    include: false
+    dynamic: false

@@ -1,0 +1,99 @@
+---
+#---------------------------------------------------------------
+# Percona specific options
+#---------------------------------------------------------------
+percona_mysql_percona_general_variables:
+  percona_mysql_query_response_time_stats:
+    comment: "Ported to PS 5.6 (5.6.21), however in order to enable this feature you’ll now need to install the necessary plugins."
+    option: query_response_time_stats
+    variable: query_response_time_stats
+    value: 1
+    include: false
+    dynamic: true
+  percona_mysql_userstat:
+    comment:
+    option: userstat
+    variable: userstat
+    value: 'OFF'
+    include: true
+    dynamic: true
+  percona_mysql_thread_statistics:
+    comment:
+    comment:
+    option: thread_statistics
+    variable: thread_statistics
+    value: 'OFF'
+    include: true
+    dynamic: true
+  percona_mysql_expand_fast_index_creation:
+    comment:
+    option: expand_fast_index_creation
+    variable: expand_fast_index_creation
+    value: 'OFF'
+    include: true
+    dynamic: true
+
+percona_mysql_percona_logging_variables:
+  percona_mysql_slow_query_log_use_global_control:
+    comment: "Can be set to none, log_slow_filter, log_slow_rate_limit, log_slow_verbosity, long_query_time, min_examined_row_limit, all.  'all' should be avoided as it can't be reflected in the running config"
+    option: slow_query_log_use_global_control
+    variable: slow_query_log_use_global_control
+    value: 'log_slow_filter,log_slow_rate_limit,log_slow_verbosity,long_query_time,min_examined_row_limit'
+    include: true
+    dynamic: true
+  percona_mysql_log_slow_sp_statements:
+    comment:
+    option: log_slow_sp_statements
+    variable: log_slow_sp_statements
+    value: 'ON'
+    include: true
+    dynamic: true
+  percona_mysql_slow_query_log_timestamp_always:
+    comment:
+    option: slow_query_log_timestamp_always
+    variable: slow_query_log_timestamp_always
+    value: 'ON'
+    include: true
+    dynamic: true
+  percona_mysql_slow_query_log_timestamp_precision:
+    comment: "Can be set to second, microsecond"
+    option: slow_query_log_timestamp_precision
+    variable: slow_query_log_timestamp_precision
+    value: second
+    include: true
+    dynamic: true
+  percona_mysql_log_slow_verbosity:
+    comment: "can be set to microtime, query_plan, innodb, minimal, standard, full, profiling, profiling_use_getrusage"
+    option: log_slow_verbosity
+    variable: log_slow_verbosity
+    value: 'microtime,query_plan'
+    include: true
+    dynamic: true
+  percona_mysql_slow_filter:
+    comment: "Can be set to qc_miss, full_scan, full_join, tmp_table, tmp_table_on_disk, filesort, filesort_on_disk"
+    option: log_slow_filter
+    variable: log_slow_filter
+    value: "''"
+    include: true
+    dynamic: true
+  percona_mysql_log_slow_rate_type:
+    comment: "session, query"
+    option: log_slow_rate_type
+    variable: log_slow_rate_type
+    value: session
+    include: true
+    dynamic: true
+  percona_mysql_log_slow_rate_limit:
+    comment:
+    option: log_slow_rate_limit
+    variable: log_slow_rate_limit
+    value: 1
+    include: true
+    dynamic: true
+percona_mysql_slow_query_log_always_write_time:
+    comment:
+    option: slow_query_log_always_write_time
+    variable: slow_query_log_always_write_time
+    value: 10
+    include: true
+    dynamic: true

@@ -1,0 +1,47 @@
+---
+#---------------------------------------------------------------
+# General caches
+#---------------------------------------------------------------
+percona_mysql_cache_variables:
+  percona_mysql_key_buffer_size:
+    comment: "Currently we have to supply value in bytes here to enable the dynamic refresh to work"
+    option: key_buffer_size
+    variable: key_buffer_size
+    value: 16777216
+    include: true
+    dynamic: true
+  percona_mysql_query_cache_type:
+    comment: "Can be set to 0, off, 1, on, 2, demand.  If set to 0, cannot be changed dynamically."
+    option: query_cache_type
+    variable: query_cache_type
+    value: 0
+    include: true
+    dynamic: false
+  percona_mysql_query_cache_size:
+    comment:
+    option: query_cache_size
+    variable: query_cache_size
+    value: 0
+    include: true
+    dynamic: true
+  percona_mysql_table_open_cache:
+    comment:
+    option: table_open_cache
+    variable: table_open_cache
+    value: 8192
+    include: true
+    dynamic: true
+  percona_mysql_tmp_table_size:
+    comment: "Currently we have to supply value in bytes here to enable the dynamic refresh to work"
+    option: tmp_table_size
+    variable: tmp_table_size
+    value: 16777216
+    include: true
+    dynamic: true
+  percona_mysql_max_heap_table_size:
+    comment: "Currently we have to supply value in bytes here to enable the dynamic refresh to work"
+    option: max_heap_table_size
+    variable: max_heap_table_size
+    value: 16777216
+    include: true
+    dynamic: true

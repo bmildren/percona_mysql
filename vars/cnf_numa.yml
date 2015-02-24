@@ -1,0 +1,25 @@
+---
+percona_mysql_numa_innodb_variables:
+  percona_mysql_innodb_buffer_pool_populate:
+    comment:
+    option: innodb_buffer_pool_populate
+    variable:
+    value: 1
+    include: true
+    dynamic: false
+
+percona_mysql_numa_mysqld_safe_variables:
+  percona_mysql_flush_caches:
+    comment:
+    option: flush_caches
+    variable:
+    value: 1
+    include: true
+    dynamic: false
+  percona_mysql_numa_interleave:
+    comment:
+    option: numa_interleave
+    variable:
+    value: 1
+    include: true
+    dynamic: false
