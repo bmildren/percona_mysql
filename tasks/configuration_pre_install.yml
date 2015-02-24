@@ -1,18 +1,33 @@
 ---
-- name: install libselinux-python if selinux is enabled
+- name: install libselinux-python if this is a RedHat derived host OS and selinux is enabled
   yum:
     name={{ item }}
     state=present
   with_items: percona_mysql_selinux_pkgs
   when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled'
 
-- name: add mysql group
+- name: change type to TokuDB if TokuDB install enabled
+  set_fact: percona_mysql_pkg_type="tokudb"
+  when: percona_mysql_include_tokudb_variables and {{ percona_mysql_server_version }} >= 5.6
+
+- name: check whether Transparent HugePages are enabled
+  shell: 'cat /sys/kernel/mm/transparent_hugepage/enabled | grep -Po "\[\K[^\]]*"'
+  changed_when: false
+  ignore_errors: yes
+  register: percona_mysql_transparent_hugepages
+  when: percona_mysql_include_tokudb_variables
+
+- name: Fail if Transparent HugePages are enabled
+  fail: msg='Transparent HugePages are enabled'
+  when: percona_mysql_include_tokudb_variables and percona_mysql_transparent_hugepages.stdout == 'always'
+
+- name: add mysql group if it doesn't exist
   group:
     name=mysql
     system=yes
     state=present
 
-- name: add mysql user
+- name: add mysql user if it doesn't exist
   user:
     name=mysql
     system=yes
@@ -25,6 +40,18 @@
 - name: create and manage percona_mysql_cnf_dir directory
   file:
     path=/etc/mysql
+    owner=mysql
+    group=mysql
+    mode=0750
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_etc_t
+    selevel=s0
+    state=directory
+
+- name: create and manage percona_mysql_cnf_dir conf directory
+  file:
+    path=/etc/mysql/conf.d
     owner=mysql
     group=mysql
     mode=0750
@@ -57,6 +84,7 @@
   changed_when: false
   ignore_errors: yes
   register: percona_mysql_port_check
+  tags: percona_mysql_manage_security
 
 - name: create context mapping for non-standard percona_mysql_port (if the port is not already listening)
   command:
@@ -80,6 +108,7 @@
     - Update percona_mysql_general_variables
     - Update percona_mysql_percona_general_variables
     - Update percona_mysql_connection_variables
+    - Update percona_mysql_threadpooling_variables
     - Update percona_mysql_cache_variables
     - Update percona_mysql_innodb_variables
     - Update percona_mysql_replication_variables

@@ -6,11 +6,14 @@ percona_mysql_selinux_pkgs:
 percona_mysql_repo:
     - "http://www.percona.com/downloads/percona-release/percona-release-0.0-1.{{ ansible_architecture }}.rpm"
 
-percona_mysql_pkg: Percona-Server-server-{{ percona_mysql_server_version|replace(".","") }}
+percona_mysql_pkg_type: server
+percona_mysql_pkg: Percona-Server-{{ percona_mysql_pkg_type }}-{{ percona_mysql_server_version|replace(".","") }}
 
 percona_mysql_additional_pkgs:
     - MySQL-python
     - percona-toolkit
+    - jemalloc
+    - numactl
 
 percona_mysql_backup_pkgs:
     - percona-xtrabackup
@@ -20,3 +23,11 @@ percona_mysql_optional_pkgs:
     - logrotate
 
 percona_mysql_user_shell: /sbin/nologin
+
+percona_mysql_jemalloc:
+  comment:
+  option: malloc-lib
+  variable:
+  value: "/usr/lib64/libjemalloc.so.1"
+  include: true
+  dynamic: false

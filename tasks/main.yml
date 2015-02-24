@@ -1,6 +1,5 @@
-- name: include OS specific vars
-  include_vars: "{{ ansible_os_family }}.yml"
-
+---
+- include: load_variables.yml
 - include: configuration_pre_install.yml
 - include: install.yml
 - include: configuration_post_install.yml

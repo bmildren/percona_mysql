@@ -1,9 +1,12 @@
 {% macro print_item(config_item) -%}
+{% if config_item.comment -%}{{ "# %s: %s"|format(config_item.option, config_item.comment) }}
+{% endif %}
 {{ "%s = %s"|format(config_item.option.ljust(63), config_item.value) }}
 {{ caller () }}
 {%- endmacro -%}
 
 {% macro print_diritem(config_dir, config_item) -%}
+{% if config_item.comment -%}{{ "# %s"|format(config_item.comment) }}{% endif %}
 {{ "%s = %s/%s"|format(config_item.option.ljust(63), config_dir, config_item.value) }}
 {{ caller () }}
 {%- endmacro -%}
@@ -43,20 +46,40 @@ pid-file                                                        = /var/run/mysql
 {{ render_item(percona_mysql_base_dir) -}}
 {{ render_item(percona_mysql_data_dir) -}}
 {{ render_item(percona_mysql_tmp_dir) -}}
-{{ render_group(percona_mysql_general_variables) }}{{ render_group(percona_mysql_percona_general_variables) }}
+{{ render_group(percona_mysql_general_variables) }}
+{% if percona_mysql_include_percona_specific_variables %}### Percona specific general options
+{{ render_group(percona_mysql_percona_general_variables) }}
+{% endif %}
 ### Connectivity options
 {{ render_item(percona_mysql_port) -}}
 {{ render_group(percona_mysql_connection_variables) }}
 ### General caches
 {{ render_group(percona_mysql_cache_variables) }}
-### InnoDB Options
+{% if percona_mysql_include_threadpooling_variables %}### Percona threadpooling options
+{{ render_group(percona_mysql_threadpooling_variables) }}
+{% endif %}
+### InnoDB options
 {% if percona_mysql_innodb_buffer_pool_size_mb.include %}
 {{ percona_mysql_innodb_buffer_pool_size_mb.option.ljust(63) }} = {{ '%sM'|format(percona_mysql_innodb_buffer_pool_size_mb.value) }}
 {% endif %}
+{% if percona_mysql_include_numa_variables %}
+{{ render_group(percona_mysql_numa_innodb_variables) }}{% endif %}
 {{ render_group(percona_mysql_innodb_variables) }}
 ### Replication options
-{{ render_group(percona_mysql_replication_variables) }}{{ render_dirgroup(percona_mysql_binlog_dir, percona_mysql_replicationdir_variables) }}
+{{ render_dirgroup(percona_mysql_binlog_dir, percona_mysql_replicationdir_variables) }}{{ render_group(percona_mysql_replication_variables) }}
 ### Logging options
-{{ render_group(percona_mysql_logging_variables) }}{{ render_dirgroup(percona_mysql_log_dir, percona_mysql_logdir_variables) }}{{ render_group(percona_mysql_percona_logging_variables) }}
+{{ render_dirgroup(percona_mysql_log_dir, percona_mysql_logdir_variables) }}{{ render_group(percona_mysql_logging_variables) }}
+{% if percona_mysql_include_percona_specific_variables %}### Percona specific logging options
+{{ render_group(percona_mysql_percona_logging_variables) }}
+{% endif %}
+
 [mysqld_safe]
-log-error                                                       = {{ percona_mysql_logdir_variables.percona_mysql_log_error.value }}
+log-error                                                       = {{ percona_mysql_log_dir }}/{{ percona_mysql_logdir_variables.percona_mysql_log_error.value }}
+{% if percona_mysql_include_jemalloc_variables or percona_mysql_include_tokudb_variables %}
+{{ percona_mysql_jemalloc.option.ljust(63) }} = {{ percona_mysql_jemalloc.value }}
+{% endif %}
+{% if percona_mysql_include_numa_variables %}
+{{ render_group(percona_mysql_numa_mysqld_safe_variables) }}
+{% endif %}
+
+!includedir /etc/mysql/conf.d/

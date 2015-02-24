@@ -1,10 +1,26 @@
 ---
 - include: configuration_mysql_dir.yml
 
-- name: install mysql system tables
+- name: install mysql system files
   command:
     mysql_install_db --user=mysql --datadir="{{ percona_mysql_data_dir.value }}"
     creates="{{ percona_mysql_data_dir.value }}/mysql"
+
+- name: copy plugins my.cnf
+  template:
+    src="plugins.cnf.j2"
+    dest=/etc/mysql/conf.d/plugins.cnf
+    owner=mysql
+    group=mysql
+    mode=0640
+    seuser=system_u
+    serole=object_r
+    setype=mysqld_etc_t
+    selevel=s0
+  notify:
+    - restart mysql
+    - Update percona_mysql_tokudb_variables
+    - Update percona_mysql_percona_audit_logging_variables
 
 - name: copying mysql.server init script to make startup script consistent across distributions
   copy:
@@ -18,7 +34,8 @@
     setype=initrc_exec_t
     selevel=s0
     force=yes
-
+  tags: percona_mysql_manage_init_script
+  
 - name: ensure mysql has been stopped after the upgrade
   service:
     name="{{ percona_mysql_service_name }}"
