@@ -117,14 +117,14 @@ percona_mysql_replication_variables:
     option: binlog_row_image
     variable: binlog_row_image
     value: FULL
-    include: true
+    include: false
     dynamic: true
   percona_mysql_binlog_rows_query_log_events:
     comment:
     option: binlog-rows-query-log-events
     variable: binlog_rows_query_log_events
     value: 'OFF'
-    include: true
+    include: false
     dynamic: true
   percona_mysql_sync_binlog:
     comment:

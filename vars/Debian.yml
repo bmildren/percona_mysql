@@ -1,7 +1,7 @@
 ---
 percona_mysql_repo:
-    - deb http://repo.percona.com/apt {{ ansible_distribution_release }} main
-    - deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main
+    - deb http://repo.percona.com/apt {{ ansible_lsb.codename }} main
+    - deb-src http://repo.percona.com/apt {{ ansible_lsb.codename }} main
 
 
 percona_mysql_pkg_type: server

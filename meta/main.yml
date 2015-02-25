@@ -6,47 +6,25 @@ galaxy_info:
   license: BSD
   min_ansible_version: 1.2
   platforms:
-  #- name: EL
-  #  versions:
-  #  - all
-  #  - 5
-  #  - 6
-  #  - 7
-  #- name: Fedora
-  #  versions:
-  #  - all
-  #  - 16
-  #  - 17
-  #  - 18
-  #  - 19
-  #  - 20
-  #- name: Amazon
-  #  versions:
-  #  - all
-  #  - 2013.03
-  #  - 2013.09
-  #- name: Ubuntu
-  #  versions:
-  #  - all
-  #  - lucid
-  #  - maverick
-  #  - natty
-  #  - oneiric
-  #  - precise
-  #  - quantal
-  #  - raring
-  #  - saucy
-  #  - trusty
-  #- name: Debian
-  #  versions:
-  #  - all
-  #  - etch
-  #  - lenny
-  #  - squeeze
-  #  - wheezy
+  - name: EL
+    versions:
+      - 6
+      - 7
+  - name: Fedora
+    versions:
+      - 18
+      - 19
+      - 20
+  - name: Ubuntu
+    versions:
+      - saucy
+      - trusty
+  - name: Debian
+    versions:
+      - wheezy
 
   categories:
-  - database
-  - database:sql
+    - database
+    - database:sql
 
 dependencies: []

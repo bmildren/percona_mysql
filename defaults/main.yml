@@ -3,7 +3,7 @@
 # Percona MySQL Role options
 #---------------------------------------------------------------
 # Desired Percona Server version
-percona_mysql_server_version: 5.6
+percona_mysql_server_version: 5.5
 
 # MySQL service name
 percona_mysql_service_name: mysql
@@ -47,7 +47,7 @@ percona_mysql_home_dir: /home
 #---------------------------------------------------------------
 percona_mysql_include_percona_specific_variables: true
 percona_mysql_include_galera_variables: false # Still to do
-percona_mysql_include_tokudb_variables: true
+percona_mysql_include_tokudb_variables: false
 percona_mysql_include_threadpooling_variables: true
 percona_mysql_include_ssl_variables: false
 percona_mysql_include_auditlog_variables: true
