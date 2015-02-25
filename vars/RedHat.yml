@@ -6,8 +6,7 @@ percona_mysql_selinux_pkgs:
 percona_mysql_repo:
     - "http://www.percona.com/downloads/percona-release/percona-release-0.0-1.{{ ansible_architecture }}.rpm"
 
-percona_mysql_pkg_type: server
-percona_mysql_pkg: Percona-Server-{{ percona_mysql_pkg_type }}-{{ percona_mysql_server_version|replace(".","") }}
+percona_mysql_pkg: Percona-{{ percona_mysql_pkg_flavor }}-{{ percona_mysql_pkg_type|lower }}-{{ percona_mysql_server_version|replace(".","") }}
 
 percona_mysql_additional_pkgs:
     - MySQL-python

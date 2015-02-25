@@ -3,9 +3,7 @@ percona_mysql_repo:
     - deb http://repo.percona.com/apt {{ ansible_lsb.codename }} main
     - deb-src http://repo.percona.com/apt {{ ansible_lsb.codename }} main
 
-
-percona_mysql_pkg_type: server
-percona_mysql_pkg: percona-server-{{ percona_mysql_pkg_type }}-{{ percona_mysql_server_version }}
+percona_mysql_pkg: percona-{{ percona_mysql_pkg_flavor|lower }}-{{ percona_mysql_pkg_type|lower }}-{{ percona_mysql_server_version }}
 
 percona_mysql_additional_pkgs:
   - python-mysqldb

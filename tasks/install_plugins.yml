@@ -5,10 +5,12 @@
   ignore_errors: yes
   register: percona_mysql_jemalloc_enabled
   when: percona_mysql_include_tokudb_variables
+  tags: percona_mysql_tokudb_prereq
 
 - name: Fail if MySQL is running with jemalloc
   fail: msg='MySQL is not running with jemalloc, TokuDB is dependent on MySQL running with jemalloc'
   when: percona_mysql_include_tokudb_variables and percona_mysql_jemalloc_enabled.stdout|int == 0
+  tags: percona_mysql_tokudb_prereq
 
 - name: Check if TokuDB is enabled
   shell: 'mysql -BNe ''show plugins'' | grep ACTIVE | cut -f1 | grep -ci TokuDB'
@@ -20,6 +22,20 @@
 - name: Fail if TokuDB is partially installed
   fail: msg='It looks like TokuDB is already partially installed, please investigate and resolve manually'
   when: percona_mysql_include_tokudb_variables and percona_mysql_tokudb_enabled.stdout|int > 0 and percona_mysql_tokudb_enabled.stdout|int < 7
+  tags: percona_mysql_tokudb_prereq
+
+- name: Check whether Transparent HugePages are enabled for this session
+  shell: 'cat /sys/kernel/mm/transparent_hugepage/defrag | grep -Po "\[\K[^\]]*"'
+  changed_when: false
+  ignore_errors: yes
+  register: percona_mysql_transparent_hugepages_defrag
+  when: percona_mysql_include_tokudb_variables
+  tags: percona_mysql_tokudb_prereq
+
+- name: Disable Transparent HugePages for this session
+  shell: echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  when: percona_mysql_include_tokudb_variables and percona_mysql_transparent_hugepages_defrag.stdout == 'always'
+  tags: percona_mysql_tokudb_prereq
 
 - name: Install TokuDB if MySQL is already running
   shell: mysql -e {{ item }}

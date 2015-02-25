@@ -23,8 +23,8 @@
     - Update percona_mysql_percona_audit_logging_variables
 
 - name: copying mysql.server init script to make startup script consistent across distributions
-  copy:
-    src=mysql.server
+  template:
+    src="mysql.server.j2"
     dest=/etc/init.d/mysql
     owner=root
     group=root
@@ -33,7 +33,6 @@
     serole=object_r
     setype=initrc_exec_t
     selevel=s0
-    force=yes
   tags: percona_mysql_manage_init_script
   
 - name: ensure mysql has been stopped after the upgrade

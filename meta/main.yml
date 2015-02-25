@@ -10,13 +10,9 @@ galaxy_info:
     versions:
       - 6
       - 7
-  - name: Fedora
-    versions:
-      - 18
-      - 19
-      - 20
   - name: Ubuntu
     versions:
+      - raring
       - saucy
       - trusty
   - name: Debian

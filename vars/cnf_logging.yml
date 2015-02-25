@@ -63,6 +63,20 @@ percona_mysql_logging_variables:
     value: 1
     include: true
     dynamic: false
+  percona_mysql_log_queries_not_using_indexes:
+    comment:
+    option: log-queries-not-using-indexes
+    variable: log_queries_not_using_indexes
+    value: 'ON'
+    include: true
+    dynamic: false
+  percona_mysql_min_examined_row_limit:
+    comment:
+    option: min-examined-row-limit
+    variable: min-examined-row-limit
+    value: 1000
+    include: false
+    dynamic: true
   percona_mysql_log_warnings:
     comment:
     option: log-warnings

@@ -6,9 +6,17 @@
   with_items: percona_mysql_selinux_pkgs
   when: ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled'
 
+- name: Fail if TokuDB and Galera options are enabled
+  fail: msg='TokuDB isn''t currently supported on Galera based hosts'
+  when: percona_mysql_include_tokudb_variables and percona_mysql_include_galera_variables
+
+- name: change flavor to XtraDB Cluster if Galera install enabled
+  set_fact: percona_mysql_pkg_flavor="XtraDB-Cluster"
+  when: percona_mysql_include_galera_variables and {{ percona_mysql_server_version|replace(".","")|int }} >= 55
+
 - name: change type to TokuDB if TokuDB install enabled
   set_fact: percona_mysql_pkg_type="tokudb"
-  when: percona_mysql_include_tokudb_variables and {{ percona_mysql_server_version }} >= 5.6
+  when: percona_mysql_include_tokudb_variables and {{ percona_mysql_server_version|replace(".","")|int }} >= 56
 
 - name: check whether Transparent HugePages are enabled
   shell: 'cat /sys/kernel/mm/transparent_hugepage/enabled | grep -Po "\[\K[^\]]*"'
@@ -16,10 +24,12 @@
   ignore_errors: yes
   register: percona_mysql_transparent_hugepages
   when: percona_mysql_include_tokudb_variables
+  tags: percona_mysql_tokudb_prereq
 
-- name: Fail if Transparent HugePages are enabled
-  fail: msg='Transparent HugePages are enabled'
+- name: Disable Transparent HugePages if installing TokuDB
+  shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
   when: percona_mysql_include_tokudb_variables and percona_mysql_transparent_hugepages.stdout == 'always'
+  tags: percona_mysql_tokudb_prereq
 
 - name: add mysql group if it doesn't exist
   group:

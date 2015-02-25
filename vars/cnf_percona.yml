@@ -2,14 +2,15 @@
 #---------------------------------------------------------------
 # Percona specific options
 #---------------------------------------------------------------
+percona_mysql_query_response_time_stats:
+  comment: "Ported to PS 5.6 (5.6.21), however in order to enable this feature you’ll now need to install the necessary plugins."
+  option: query_response_time_stats
+  variable: query_response_time_stats
+  value: 1
+  include: false
+  dynamic: true
+
 percona_mysql_percona_general_variables:
-  percona_mysql_query_response_time_stats:
-    comment: "Ported to PS 5.6 (5.6.21), however in order to enable this feature you’ll now need to install the necessary plugins."
-    option: query_response_time_stats
-    variable: query_response_time_stats
-    value: 1
-    include: false
-    dynamic: true
   percona_mysql_userstat:
     comment:
     option: userstat
@@ -90,7 +91,7 @@ percona_mysql_percona_logging_variables:
     value: 1
     include: true
     dynamic: true
-percona_mysql_slow_query_log_always_write_time:
+  percona_mysql_slow_query_log_always_write_time:
     comment:
     option: slow_query_log_always_write_time
     variable: slow_query_log_always_write_time

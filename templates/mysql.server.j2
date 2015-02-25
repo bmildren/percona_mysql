@@ -1,5 +1,5 @@
 #!/bin/sh
-# # {{ ansible_managed }}
+### {{ ansible_managed }}
 # Copyright Abandoned 1996 TCX DataKonsult AB & Monty Program KB & Detron HB
 # This file is public domain and comes with NO WARRANTY of any kind
 
@@ -44,8 +44,8 @@
 # If you change base dir, you must also change datadir. These may get
 # overwritten by settings in the MySQL configuration files.
 
-basedir=
-datadir=
+basedir={{ percona_mysql_base_dir.value }}
+datadir={{ percona_mysql_data_dir.value }}
 
 # Default value, in seconds, afterwhich the script should timeout waiting
 # for server start. 

@@ -3,7 +3,7 @@
 # Percona MySQL Role options
 #---------------------------------------------------------------
 # Desired Percona Server version
-percona_mysql_server_version: 5.5
+percona_mysql_server_version: 5.6
 
 # MySQL service name
 percona_mysql_service_name: mysql
@@ -25,7 +25,7 @@ percona_mysql_upgrade: false
 percona_mysql_check_upgrade: false
 
 # Should we force a MySQL restart if the my.cnf changes?
-percona_mysql_force_restart: 0
+percona_mysql_force_restart: false
 percona_mysql_key_server: keys.gnupg.net
 
 # MySQL root password (The recommendation is to use ansible-vault)
@@ -48,8 +48,18 @@ percona_mysql_home_dir: /home
 percona_mysql_include_percona_specific_variables: true
 percona_mysql_include_galera_variables: false # Still to do
 percona_mysql_include_tokudb_variables: false
-percona_mysql_include_threadpooling_variables: true
+percona_mysql_include_threadpooling_variables: false
 percona_mysql_include_ssl_variables: false
-percona_mysql_include_auditlog_variables: true
-percona_mysql_include_jemalloc_variables: true
-percona_mysql_include_numa_variables: true
+percona_mysql_include_auditlog_variables: false
+percona_mysql_include_jemalloc_variables: false
+percona_mysql_include_numa_variables: false
+
+# Installation type (set automatically)
+#   - server (default)
+#   - tokudb
+percona_mysql_pkg_type: Server
+
+# Installation flavor (set automatically)
+#   - Server (default)
+#   - XtraDB-Cluster
+percona_mysql_pkg_flavor: Server
