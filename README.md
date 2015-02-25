@@ -13,6 +13,7 @@ The role will continue to be actively developed, pull requests are of course wel
 Example usage:
 
   roles:
+  
       - { role: percona_mysql, percona_mysql_include_tokudb_variables: true, percona_mysql_include_auditlog_variables: true }
 
 There are several tags used in the role, mostly this are useful if you want to skip sections:
