@@ -71,7 +71,7 @@ percona_mysql_innodb_variables:
     comment:
     option: innodb_file_per_table
     variable: innodb_file_per_table
-    value: 'ON'
+    value: 1
     include: true
     dynamic: true
   percona_mysql_innodb_open_files:
