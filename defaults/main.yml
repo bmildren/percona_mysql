@@ -16,7 +16,7 @@ percona_mysql_install: master
 
 # By default we just want to ensure that MySQL is installed. To override this
 # and perform an upgrade, you need to explicitly set percona_mysql_upgrade to
-# false. Any other value, will result in the default behaviour of simply
+# true. Any other value, will result in the default behaviour of simply
 # checking the package is present. Note upgrading MySQL will force the service
 # to be stopped first if an upgrade is available.
 percona_mysql_upgrade: false
